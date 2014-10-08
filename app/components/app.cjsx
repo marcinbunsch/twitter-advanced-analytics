@@ -1,51 +1,47 @@
-/** @jsx React.DOM */
+# @cjsx React.DOM
 
-var Database = require('components/database')
-var Dispatcher = require('dispatcher')
-var WeekAnalysis = require('components/week_analysis')
+Database = require('components/database')
+Dispatcher = require('dispatcher')
+WeekAnalysis = require('components/week_analysis')
 
-var PillsMenu = React.createClass({
-  render: function() {
-    var context = this.props.data.get('context')
+PillsMenu = React.createClass
+  render: ->
+    context = this.props.data.get('context')
     return <div className="navigation">
       <ul className="nav nav-pills">
-        <li className={context == 'behavior' ? 'active' : ''}>
+        <li className={if context == 'behavior' then 'active' else ''}>
           <a className="filter" onClick={Dispatcher.showBehaviorPage}>Week Analysis</a>
         </li>
-        <li className={context == 'database' ? 'active' : ''}>
+        <li className={if context == 'database' then 'active' else ''}>
           <a className="filter" onClick={Dispatcher.showDatabasePage}>Database</a>
         </li>
       </ul>
     </div>
-  }
-})
 
 
-var App = React.createClass({
-  render: function() {
-    if (this.props.data.get('boot')) {
+App = React.createClass
+  render: ->
+    if this.props.data.get('boot')
       return <div className="booting">
         Loading database
       </div>
-    } else {
-      var contents = []
-      if (this.contextIs('database'))
+    else
+      contents = []
+      if this.contextIs('database')
         contents.push(<Database data={this.props.data} />)
-      if (this.contextIs('behavior'))
+      if this.contextIs('behavior')
         contents.push(<WeekAnalysis data={this.props.data} />)
+      console.log(contents)
       return <div>
         <PillsMenu data={this.props.data}/>
         {contents}
       </div>
-    }
-  },
-  contextIs: function(name) {
+
+  contextIs: (name) ->
     return this.getContext() == name
-  },
-  getContext: function() {
+
+  getContext: ->
     return this.props.data.get('context')
-  }
-})
 
 module.exports = App
 

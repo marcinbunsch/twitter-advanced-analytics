@@ -1,20 +1,21 @@
-/** @jsx React.DOM */
-var Dispatcher = require('dispatcher')
-var Blacklist = require('blacklist')
+# @cjsx React.DOM
 
-var Tweet = React.createClass({
+Dispatcher = require('dispatcher')
+Blacklist = require('blacklist')
 
-  render: function() {
-    var tweet = this.props.tweet
-    var doc = this.props.tweet.doc
-    var text = doc['Tweet text']
-    var impressions = doc['impressions']
-    var engagements = doc['engagements']
-    var time = doc['time']
-    var retweets = doc['retweets']
-    var favorites = doc['favorites']
-    var ignored = Blacklist.isIgnored(tweet.id)
-    var formattedTime = moment(time).format('HH:mm, DD/MM/YYYY')
+Tweet = React.createClass({
+
+  render: ->
+    tweet = this.props.tweet
+    doc = this.props.tweet.doc
+    text = doc['Tweet text']
+    impressions = doc['impressions']
+    engagements = doc['engagements']
+    time = doc['time']
+    retweets = doc['retweets']
+    favorites = doc['favorites']
+    ignored = Blacklist.isIgnored(tweet.id)
+    formattedTime = moment(time).format('HH:mm, DD/MM/YYYY')
     return <tr>
       <td className="time">
         {formattedTime}
@@ -40,20 +41,20 @@ var Tweet = React.createClass({
         <input type="checkbox" checked={ignored} onChange={this.toggleIgnore} />
       </td>
     </tr>
-  },
-  toggleIgnore: function() {
-    var tweet = this.props.tweet
+
+  toggleIgnore: ->
+    tweet = this.props.tweet
     Dispatcher.toggleIgnore(tweet)
-  }
+
 })
 
-var Database = React.createClass({
-  render: function() {
-    var tweets = this.props.data.get('tweets') || []
-    var rows = []
-    tweets.forEach(function(tweet) {
+Database = React.createClass({
+
+  render: ->
+    tweets = this.props.data.get('tweets') || []
+    rows = []
+    tweets.forEach (tweet) ->
       rows.push(<Tweet tweet={tweet} />)
-    })
     return <table className="database">
       <tr>
         <th>Time</th>
@@ -66,7 +67,8 @@ var Database = React.createClass({
       </tr>
       {rows}
     </table>
-  }
+
 })
 
 module.exports = Database
+
